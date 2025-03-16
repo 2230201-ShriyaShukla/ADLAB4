@@ -1,0 +1,61 @@
+<!-- templates/chatbot.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chat with Your Document</title>
+    <!-- You can add your CSS styles here or link to a CSS file in static/css/ -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Chat with Your Document</h1>
+    
+    <!-- Dropdown to select the LLM model -->
+    <label for="model_choice">Choose LLM Model:</label>
+    <select id="model_choice">
+        <option value="LLama">LLama</option>
+        <option value="Gemma">Gemma</option>
+        <option value="default">Default</option>
+    </select>
+    
+    <!-- Chat display area -->
+    <div id="chat-box" style="border: 1px solid #ccc; padding: 10px; width: 80%; height: 300px; overflow-y: scroll;">
+        <!-- Chat messages will appear here -->
+    </div>
+    <br>
+    
+    <!-- Input field and send button -->
+    <input type="text" id="query" placeholder="Ask a question..." style="width: 70%;">
+    <button id="send-btn">Send</button>
+
+    <script>
+        $(document).ready(function(){
+            $('#send-btn').click(function(){
+                var query = $('#query').val();
+                var model_choice = $('#model_choice').val();
+                if(query.trim() === "") return;
+
+                // Display the user query in the chat box
+                $('#chat-box').append('<p><strong>You:</strong> ' + query + '</p>');
+
+                // Send the query to the backend via AJAX
+                $.ajax({
+                    url: '/ask',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({query: query, model_choice: model_choice}),
+                    success: function(response){
+                        // Display the chatbot answer in the chat box
+                        $('#chat-box').append('<p><strong>Bot:</strong> ' + response.answer + '</p>');
+                        // Clear the input field
+                        $('#query').val('');
+                    },
+                    error: function(){
+                        $('#chat-box').append('<p><strong>Error:</strong> Something went wrong.</p>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

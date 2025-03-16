@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Document</title>
+</head>
+<body>
+    <h1>Upload Your Document</h1>
+    <form action="/uploads" method="post" enctype="multipart/form-data">
+        <label for="document">Select a file (PDF, DOCX, XLS/XLSX):</label><br><br>
+        <input type="file" name="document" id="document" required><br><br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
